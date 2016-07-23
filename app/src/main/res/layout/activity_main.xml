@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Team 1"
-        android:id="@+id/des_team1"
+        android:id="@+id/team1"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -23,8 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Team 2"
-        android:id="@+id/des_team2"
-        android:layout_below="@+id/des_team1"
+        android:id="@+id/team2"
+        android:layout_below="@+id/team1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -35,14 +35,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/des_team1"
-        android:layout_alignEnd="@+id/des_team1" />
+        android:layout_alignRight="@+id/team1"
+        android:layout_alignEnd="@+id/team1" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/des_1"
-        android:layout_toRightOf="@id/des_team1"
+        android:layout_toRightOf="@id/team1"
         android:text="1"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
@@ -134,7 +134,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/des_sum"
         android:layout_toRightOf="@id/des_10"
-        android:text="00"
+        android:text="0"
         android:layout_marginTop="16dp"
         android:layout_marginRight="7dp" />
 
@@ -143,7 +143,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/des_11"
-        android:layout_toRightOf="@id/des_team2"
+        android:layout_toRightOf="@id/team2"
         android:text="1"
         android:layout_marginTop="32dp"
         android:layout_marginLeft="16dp"
@@ -235,18 +235,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/des_sum2"
         android:layout_toRightOf="@id/des_20"
-        android:text="00"
+        android:text="0"
         android:layout_marginTop="32dp"
         android:layout_marginRight="7dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/des_score"
-        android:layout_toRightOf="@id/des_empty"
-        android:text="1  2  3  4  5  6  7  8  9  E"
-        android:layout_marginTop="0dp"
-        android:layout_marginLeft="16dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -258,7 +249,7 @@
         android:layout_toRightOf="@+id/des_sum"
         android:layout_toEndOf="@+id/des_sum"
         android:layout_marginLeft="40dp"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="18dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -269,15 +260,102 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/des_inn"
         android:layout_toEndOf="@+id/des_inn"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="18dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Swing"
         android:id="@+id/btn_swing"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/des_inn"
-        android:layout_toStartOf="@+id/des_inn" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OUT"
+        android:id="@+id/OUT"
+        android:layout_below="@+id/team2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/team2"
+        android:layout_alignEnd="@+id/team2"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/des_out"
+        android:layout_alignTop="@+id/OUT"
+        android:layout_toRightOf="@+id/OUT"
+        android:layout_toEndOf="@+id/OUT"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="7dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="STRIKE"
+        android:id="@+id/STRIKE"
+        android:layout_below="@+id/OUT"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/des_out"
+        android:layout_toStartOf="@+id/des_out"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/des_strike"
+        android:layout_alignTop="@+id/STRIKE"
+        android:layout_toRightOf="@+id/STRIKE"
+        android:layout_toEndOf="@+id/STRIKE"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="7dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BALL"
+        android:id="@+id/BALL"
+        android:layout_below="@+id/STRIKE"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/des_out"
+        android:layout_toStartOf="@+id/des_out"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/des_ball"
+        android:layout_alignTop="@+id/BALL"
+        android:layout_toRightOf="@+id/BALL"
+        android:layout_toEndOf="@+id/BALL"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="7dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="50dp"
+        android:text="게임이 시작되었습니다."
+        android:id="@+id/log"
+        android:gravity="fill_horizontal|center_horizontal"
+        android:layout_below="@+id/des_ball"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NOT Swing"
+        android:id="@+id/btn_Notswing"
+        android:layout_above="@+id/btn_swing"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
