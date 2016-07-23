@@ -138,9 +138,12 @@
         android:text="0"
         android:textSize="28dp"
         android:layout_above="@+id/des_2b"
-        android:layout_alignLeft="@+id/des_11"
-        android:layout_alignStart="@+id/des_11"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"
+        android:layout_toLeftOf="@+id/des_12"
+        android:layout_toRightOf="@+id/team2"
+        android:layout_toEndOf="@+id/team2"
+        android:width="40dp"
+        android:gravity="center" />
 
 
     <TextView
@@ -240,9 +243,11 @@
         android:id="@+id/des_sum2"
         android:text="0"
         android:textSize="28dp"
+        android:gravity="center"
+        android:width="40dp"
         android:layout_alignTop="@+id/des_sum"
-        android:layout_toRightOf="@+id/btn_swing"
-        android:layout_toEndOf="@+id/btn_swing" />
+        android:layout_alignRight="@+id/des_20"
+        android:layout_alignEnd="@+id/des_20" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -176,6 +176,10 @@ public class MainActivity extends AppCompatActivity {
                 checkifgameset();
                 checkifinnset();
             }
+            else if (on_3rd_base) {
+                raise_score(current_team());
+                on_3rd_base = false;
+            }
             ((TextView)findViewById(R.id.log)).setText("병살!");
         }
         strike = 0;
