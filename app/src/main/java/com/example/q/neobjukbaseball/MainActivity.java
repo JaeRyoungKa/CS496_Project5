@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     int out_count = 0 ;
     int strike = 0 ;
     int ball = 0 ;
+    int coe = ball - strike;
     boolean on_3rd_base = false;
     boolean on_2nd_base = false;
     boolean on_1st_base = false;
@@ -33,9 +34,19 @@ public class MainActivity extends AppCompatActivity {
     Button.OnClickListener mClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             if (gameset == 0) {
-                int returnee = onSwing();
-                if (returnee == 0) HR();
-                if (returnee == 1) OUT();
+                if (random.nextInt(100) < 53) { // 54 % chance
+                    int returnee = onSwing();
+                    if (returnee == 0) HR();
+                    if (returnee == 1) OUT(0);
+                    if (returnee == 2) H(1);
+                    if (returnee == 3) H(2);
+                    if (returnee == 4) H(3);
+                    if (returnee == 5) OUT(1);
+                    if (returnee == 6) FOUL();
+                }
+                else {
+                    STRIKE(1);
+                }
             }
         }
     };
@@ -44,12 +55,101 @@ public class MainActivity extends AppCompatActivity {
     Button.OnClickListener mClickListener2 = new View.OnClickListener() {
         public void onClick(View v) {
             if (gameset == 0) {
-                int returnee = onNotSwing();
-                if (returnee == 0) HR();
-                if (returnee == 1) OUT();
+                if (random.nextInt(100) > 53) {
+                    BALL();
+                }
+                else STRIKE(0);
             }
         }
     };
+
+    private void STRIKE(int param) {
+        if (param == 0) ((TextView)findViewById(R.id.log)).setText("스트라이크!");
+        if (param == 1) ((TextView)findViewById(R.id.log)).setText("헛스윙!");
+        strike++;
+        if (strike == 3) {
+            out_count++;
+            strike = 0;
+            ball = 0;
+            ((TextView)findViewById(R.id.log)).setText("스트라이크 아웃!");
+            checkifgameset();
+            checkifinnset();
+        }
+        refresh_billboard();
+    }
+
+    private void BALL() {
+        ((TextView)findViewById(R.id.log)).setText("볼!");
+        ball++;
+        if (ball == 4) {
+            if (on_2nd_base && on_3rd_base && on_1st_base) {
+                raise_score(current_team());
+            }
+            else if (on_1st_base && on_2nd_base) {
+                on_3rd_base = true;
+            }
+            else if (on_1st_base) on_2nd_base = true;
+            else on_1st_base = true;
+            ball = 0;
+            strike = 0;
+        }
+        refresh_billboard();
+        checkifgameset();
+    }
+
+    private void FOUL() {
+        if (strike != 2) strike++;
+        ((TextView)findViewById(R.id.log)).setText("파울!");
+        refresh_billboard();
+    }
+
+    private void H(int param) {
+        if (param == 1) {
+            if (on_3rd_base) {
+                raise_score(current_team());
+                on_3rd_base = false;
+            }
+            if (on_2nd_base) {
+                on_3rd_base = true;
+                on_2nd_base = false;
+            }
+            if (on_1st_base) {
+                on_2nd_base = true;
+                on_1st_base = false;
+            }
+            on_1st_base = true;
+            ((TextView)findViewById(R.id.log)).setText("안타!");
+        }
+        if (param == 2) {
+            if (on_3rd_base) {
+                raise_score(current_team());
+                on_3rd_base = false;
+            }
+            if (on_2nd_base) {
+                raise_score(current_team());
+                on_2nd_base = false;
+            }
+            if (on_1st_base) {
+                on_3rd_base = true;
+                on_1st_base = false;
+            }
+            on_2nd_base = true;
+            ((TextView)findViewById(R.id.log)).setText("2루타");
+        }
+        if (param == 3) {
+            if (on_3rd_base) raise_score(current_team());
+            if (on_2nd_base) raise_score(current_team());
+            if (on_1st_base) raise_score(current_team());
+            on_1st_base = false;
+            on_2nd_base = false;
+            on_3rd_base = true;
+            ((TextView)findViewById(R.id.log)).setText("3루타!");
+        }
+        strike = 0;
+        ball = 0;
+        refresh_billboard();
+        checkifgameset();
+    }
 
     private void HR() {
         raise_score(current_team());
@@ -60,57 +160,94 @@ public class MainActivity extends AppCompatActivity {
         on_2nd_base = false;
         on_3rd_base = false;
         ((TextView)findViewById(R.id.log)).setText("홈런!");
+        strike = 0;
+        ball = 0;
+        refresh_billboard();
+        checkifgameset();
     }
 
-    private void OUT() {
-        out_count++;
-        refresh_billboard();
-        if (out_count >= 3 ) {
-            checkifgameset();
-            checkifinnset();
+    private void OUT(int parameter) {
+        // if parameter is zero
+        if (parameter == 0) {
+            out_count++;
+            if (out_count >= 3 ) {
+                checkifgameset();
+                checkifinnset();
+            }
+            ((TextView)findViewById(R.id.log)).setText("아웃!");
         }
-        ((TextView)findViewById(R.id.log)).setText("아웃!");
+        if (parameter == 1) {
+            if (out_count < 2) {
+                out_count++;
+                if (on_3rd_base) raise_score(current_team());
+                on_3rd_base = false;
+                if (on_2nd_base) on_3rd_base = true;
+            }
+            else {
+                out_count++;
+                if (out_count >= 3 ) {
+                    checkifgameset();
+                    checkifinnset();
+                }
+            }
+            ((TextView)findViewById(R.id.log)).setText("플라이아웃!");
+        }
+        strike = 0;
+        ball = 0;
+        refresh_billboard();
+        checkifgameset();
+        checkifinnset();
+
     }
 
     private void refresh_billboard() {
         ((TextView)findViewById(R.id.des_out)).setText(String.valueOf(out_count));
         ((TextView)findViewById(R.id.des_strike)).setText(String.valueOf(strike));
         ((TextView)findViewById(R.id.des_ball)).setText(String.valueOf(ball));
+        if(on_1st_base) ((TextView)findViewById(R.id.des_1b)).setText("1");
+        if(on_2nd_base) ((TextView)findViewById(R.id.des_2b)).setText("2");
+        if(on_3rd_base) ((TextView)findViewById(R.id.des_3b)).setText("3");
+        if(!on_1st_base) ((TextView)findViewById(R.id.des_1b)).setText("");
+        if(!on_2nd_base) ((TextView)findViewById(R.id.des_2b)).setText("");
+        if(!on_3rd_base) ((TextView)findViewById(R.id.des_3b)).setText("");
 
     }
 
     private void checkifinnset() {
-        if (out_count >= 3) {
-            out_count = 0 ;
-            strike = 0;
-            ball = 0;
-            on_3rd_base = false;
-            on_2nd_base = false;
-            on_1st_base = false;
-            change_inn();
-            refresh_billboard();
+        if (checkifgameset() == 0) {
+            if (out_count >= 3) {
+                out_count = 0;
+                strike = 0;
+                ball = 0;
+                on_3rd_base = false;
+                on_2nd_base = false;
+                on_1st_base = false;
+                change_inn();
+                refresh_billboard();
+            }
         }
     }
     private int onSwing() {
-        int dice = random.nextInt(100);
-        if (dice > 50) return 1;
-        return 0;
-    }
+        int dice = random.nextInt(50);
+        if (dice < 2) return 0; // 4% HR
+        if (dice < 17) return 1;// 30% OUT
+        if (dice < 32) return 2; // 30% 1H
+        if (dice < 36) return 3; // 8% 2H
+        if (dice < 38) return 4; // 4% 3H
+        if (dice < 43) return 5; // 10% FlyOut
+        if (dice < 50) return 6; // 12% Foul
 
-    private int onNotSwing() {
-        int dice = random.nextInt(100);
-        if (dice > 50) return 1;
         return 0;
     }
 
     private int checkifgameset() {
         int score1 = Integer.parseInt((String) ((TextView) findViewById(R.id.des_sum)).getText());
         int score2 = Integer.parseInt((String) ((TextView) findViewById(R.id.des_sum2)).getText());
-        if (current_inn() >= 109 && current_inn() <= 199 && score2 > score1) {
+        if (out_count == 3 && current_inn() >= 109 && current_inn() <= 199 && score2 > score1) {
             gameset = 2;
             return 2;
         }
-        else if (current_inn() >= 209 && score1 > score2) {
+        else if (out_count == 3 && current_inn() >= 209 && score1 > score2) {
             gameset = 1;
             return 1;
         }
@@ -145,6 +282,13 @@ public class MainActivity extends AppCompatActivity {
             td.setText("▲");
             inn.setText(String.valueOf(Integer.parseInt((String) inn.getText())+1));
         }
+        on_1st_base = false;
+        on_2nd_base = false;
+        on_3rd_base = false;
+        out_count = 0;
+        strike = 0;
+        ball = 0;
+        refresh_billboard();
     }
 
     private void raise_score(int team_num) {
