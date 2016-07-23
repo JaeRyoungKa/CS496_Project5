@@ -14,7 +14,6 @@ public class MainActivity extends AppCompatActivity {
     int out_count = 0 ;
     int strike = 0 ;
     int ball = 0 ;
-    int coe = ball - strike;
     boolean on_3rd_base = false;
     boolean on_2nd_base = false;
     boolean on_1st_base = false;
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Button.OnClickListener mClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             if (gameset == 0) {
-                if (random.nextInt(100) < 53) { // 54 % chance
+                if (random.nextInt(100) < 53 + 3 * (ball-strike)) {
                     int returnee = onSwing();
                     if (returnee == 0) HR();
                     if (returnee == 1) OUT(0);
@@ -43,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     if (returnee == 4) H(3);
                     if (returnee == 5) OUT(1);
                     if (returnee == 6) FOUL();
+                    if (returnee == 7) Double_Play();
                 }
                 else {
                     STRIKE(1);
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     Button.OnClickListener mClickListener2 = new View.OnClickListener() {
         public void onClick(View v) {
             if (gameset == 0) {
-                if (random.nextInt(100) > 53) {
+                if (random.nextInt(100) > 53 + 3 * (ball-strike)) {
                     BALL();
                 }
                 else STRIKE(0);
@@ -166,6 +166,25 @@ public class MainActivity extends AppCompatActivity {
         checkifgameset();
     }
 
+    private void Double_Play() {
+        if (!on_1st_base) OUT(0);
+        else {
+            out_count++;
+            on_1st_base = false;
+            out_count++;
+            if (out_count >= 3 ) {
+                checkifgameset();
+                checkifinnset();
+            }
+            ((TextView)findViewById(R.id.log)).setText("병살!");
+        }
+        strike = 0;
+        ball = 0;
+        refresh_billboard();
+        checkifgameset();
+        checkifinnset();
+    }
+
     private void OUT(int parameter) {
         // if parameter is zero
         if (parameter == 0) {
@@ -228,16 +247,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private int onSwing() {
-        int dice = random.nextInt(50);
-        if (dice < 2) return 0; // 4% HR
-        if (dice < 17) return 1;// 30% OUT
-        if (dice < 32) return 2; // 30% 1H
-        if (dice < 36) return 3; // 8% 2H
-        if (dice < 38) return 4; // 4% 3H
-        if (dice < 43) return 5; // 10% FlyOut
-        if (dice < 50) return 6; // 12% Foul
-
-        return 0;
+        double coe = 1 + 0.12*(ball - strike);
+        double coe2 = 1 - 0.12*(ball - strike);
+        int chance_HR = (int) (400*coe);
+        int chance_1H = (int) (3000*coe);
+        int chance_2H = (int) (800*coe);
+        int chance_3H = (int) (400*coe);
+        int chance_OUT = (int) (1000*coe2);
+        int chance_FOUL = (int) (1100*coe2);
+        int chance_FLY = (int) (1000*coe2);
+        int chance_DP = (int) (300*coe2);
+        int dice = random.nextInt(chance_HR + chance_1H + chance_2H + chance_3H + chance_DP + chance_FLY + chance_FOUL + chance_OUT);
+        if (dice < chance_HR) return 0;
+        if (dice < chance_HR + chance_OUT) return 1;
+        if (dice < chance_HR + chance_OUT + chance_1H) return 2;
+        if (dice < chance_HR + chance_OUT + chance_1H + chance_2H) return 3;
+        if (dice < chance_HR + chance_OUT + chance_1H + chance_2H + chance_3H) return 4;
+        if (dice < chance_HR + chance_OUT + chance_1H + chance_2H + chance_3H + chance_FLY) return 5;
+        if (dice < chance_HR + chance_OUT + chance_1H + chance_2H + chance_3H + chance_FLY + chance_FOUL) return 6;
+        return 7;
     }
 
     private int checkifgameset() {
