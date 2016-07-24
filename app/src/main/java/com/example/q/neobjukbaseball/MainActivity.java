@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Button.OnClickListener mClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             if (gameset == 0) {
-                if (random.nextInt(100) < 53 + 3 * (ball-strike)) {
+                if (random.nextInt(100) < 50 + 3 * (ball-strike)) {
                     int returnee = onSwing();
                     if (returnee == 0) HR();
                     if (returnee == 1) OUT(0);
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     Button.OnClickListener mClickListener2 = new View.OnClickListener() {
         public void onClick(View v) {
             if (gameset == 0) {
-                if (random.nextInt(100) > 53 + 3 * (ball-strike)) {
+                if (random.nextInt(100) > 50 + 3 * (ball-strike)) {
                     BALL();
                 }
                 else STRIKE(0);
@@ -251,16 +251,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private int onSwing() {
-        double coe = 1 + 0.12*(ball - strike);
-        double coe2 = 1 - 0.12*(ball - strike);
-        int chance_HR = (int) (400*coe);
-        int chance_1H = (int) (3000*coe);
+        double coe = 1 + 0.20*(ball - strike);
+        double coe2 = 1 - 0.20*(ball - strike);
+        int chance_HR = (int) (240*coe);
+        int chance_1H = (int) (2400*coe);
         int chance_2H = (int) (800*coe);
-        int chance_3H = (int) (400*coe);
-        int chance_OUT = (int) (1000*coe2);
-        int chance_FOUL = (int) (1100*coe2);
-        int chance_FLY = (int) (1000*coe2);
-        int chance_DP = (int) (300*coe2);
+        int chance_3H = (int) (240*coe);
+        int chance_OUT = (int) (900*coe2);
+        int chance_FOUL = (int) (1000*coe2);
+        int chance_FLY = (int) (900*coe2);
+        int chance_DP = (int) (280*coe2);
         int dice = random.nextInt(chance_HR + chance_1H + chance_2H + chance_3H + chance_DP + chance_FLY + chance_FOUL + chance_OUT);
         if (dice < chance_HR) return 0;
         if (dice < chance_HR + chance_OUT) return 1;
